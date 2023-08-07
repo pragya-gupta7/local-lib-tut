@@ -10,12 +10,19 @@ var coolRouter = require("./routes/cool");
 const catalogRouter = require("./routes/catalog");
 
 var app = express();
+
 //set up mongoose connection
 const mongoose = require("mongoose");
+// Set `strictQuery: false` to globally opt into filtering by properties that aren't in the schema
+// Included because it removes preparatory warnings for Mongoose 7.
+// See: https://mongoosejs.com/docs/migrating_to_6.html#strictquery-is-removed-and-replaced-by-strict
 mongoose.set("strictQuery", false);
-const mongoDB =
-  "mongodb+srv://20je0695:gdasfh56QW@cluster0.rdbvm6b.mongodb.net/local_library?retryWrites=true&w=majority";
-
+const dev_db_url =
+  "mongodb+srv://cooluser:coolpassword@cluster0.lz91hw2.mongodb.net/local_library?retryWrites=true&w=majority";
+const mongoDB = process.env.MONGODB_URI || dev_db_url;
+//const mongoDB =
+//"mongodb+srv://20je0695:gdasfh56QW@cluster0.m7reh7x.mongodb.net/?retryWrites=true&w=majority";
+// Wait for database to connect, logging an error if there is a problem
 main().catch((err) => console.log(err));
 async function main() {
   await mongoose.connect(mongoDB);
